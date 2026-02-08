@@ -1,0 +1,228 @@
+openapi: 3.0.0
+info:
+  title: Todo Task API
+  description: REST API for managing user tasks in the Todo Full-Stack Web Application
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Development server
+
+paths:
+  /api/{user_id}/tasks:
+    get:
+      summary: Get all tasks for a user
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: Unique identifier of the user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '401':
+          description: Unauthorized - Invalid or missing authentication
+        '404':
+          description: User not found
+    post:
+      summary: Create a new task for a user
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: Unique identifier of the user
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskRequest'
+      responses:
+        '201':
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Invalid request data
+        '401':
+          description: Unauthorized - Invalid or missing authentication
+        '404':
+          description: User not found
+
+  /api/{user_id}/tasks/{id}:
+    get:
+      summary: Get a specific task by ID
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: Unique identifier of the user
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the task
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '401':
+          description: Unauthorized - Invalid or missing authentication
+        '404':
+          description: Task not found or user does not own the task
+    put:
+      summary: Update an existing task
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: Unique identifier of the user
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the task
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskRequest'
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Invalid request data
+        '401':
+          description: Unauthorized - Invalid or missing authentication
+        '404':
+          description: Task not found or user does not own the task
+    delete:
+      summary: Delete a task
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: Unique identifier of the user
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the task
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Task deleted successfully
+        '401':
+          description: Unauthorized - Invalid or missing authentication
+        '404':
+          description: Task not found or user does not own the task
+
+components:
+  schemas:
+    Task:
+      type: object
+      required:
+        - id
+        - title
+        - completed
+        - user_id
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the task
+          example: 1
+        title:
+          type: string
+          description: Title of the task
+          maxLength: 255
+          example: "Buy groceries"
+        description:
+          type: string
+          description: Optional description of the task
+          maxLength: 1000
+          example: "Milk, eggs, bread, fruits"
+        completed:
+          type: boolean
+          description: Whether the task is completed
+          example: false
+        user_id:
+          type: string
+          description: ID of the user who owns the task
+          example: "user-12345"
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the task was created
+          example: "2023-10-20T10:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the task was last updated
+          example: "2023-10-20T10:00:00Z"
+
+    CreateTaskRequest:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          description: Title of the task
+          maxLength: 255
+          example: "Buy groceries"
+        description:
+          type: string
+          description: Optional description of the task
+          maxLength: 1000
+          example: "Milk, eggs, bread, fruits"
+        completed:
+          type: boolean
+          description: Whether the task is completed (defaults to false)
+          example: false
+
+    UpdateTaskRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Updated title of the task
+          maxLength: 255
+          example: "Buy groceries"
+        description:
+          type: string
+          description: Updated description of the task
+          maxLength: 1000
+          example: "Milk, eggs, bread, fruits"
+        completed:
+          type: boolean
+          description: Updated completion status
+          example: true

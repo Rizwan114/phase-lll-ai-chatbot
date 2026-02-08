@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c:*)",
+      "Bash(python:*)",
+      "Bash(npm install axios @radix-ui/react-checkbox lucide-react)",
+      "Bash(npm install axios @radix-ui/react-checkbox lucide-react --legacy-peer-deps)",
+      "Bash(find:*)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0dXNlcjEiLCJ1c2VyX2lkIjoidGVzdHVzZXIxIiwiZXhwIjoxNzcwNTM1NzEwfQ.9cqPIsXO5ni6VPEl69UwxOLgT1Dmeli5q-_PCK92ha8\")",
+      "Bash(__NEW_LINE_da4cff2b51fdf74b__ echo \"=== GET SINGLE TASK ===\")",
+      "Bash(curl:*)",
+      "Bash(__NEW_LINE_da4cff2b51fdf74b__ echo \"\")",
+      "Bash(npm run build:*)",
+      "WebFetch(domain:openai.github.io)"
+    ]
+  }
+}
