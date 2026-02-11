@@ -1,12 +1,14 @@
 "use client";
 
 import { useAuth } from "@/lib/auth/auth-context";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 
 export function Header() {
   const { isAuthenticated, userId, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = () => {
     logout();
@@ -35,6 +37,30 @@ export function Header() {
           <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100">
             Todo App
           </h1>
+          {isAuthenticated && (
+            <nav className="flex items-center gap-1 ml-4">
+              <Link
+                href="/dashboard"
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  pathname === "/dashboard"
+                    ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                    : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                }`}
+              >
+                Tasks
+              </Link>
+              <Link
+                href="/chat"
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  pathname === "/chat"
+                    ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                    : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                }`}
+              >
+                Chat
+              </Link>
+            </nav>
+          )}
         </div>
 
         {isAuthenticated && (

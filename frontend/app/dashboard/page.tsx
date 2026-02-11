@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth/auth-context";
 import { Header } from "@/components/layout/Header";
 import { TaskList } from "@/components/tasks/TaskList";
+import { ChatFab } from "@/components/chat/ChatFab";
 import { Spinner } from "@/components/ui/Spinner";
 
 export default function DashboardPage() {
@@ -50,6 +51,7 @@ export default function DashboardPage() {
         </div>
         <TaskList />
       </main>
+      <ChatFab />
     </div>
   );
 }

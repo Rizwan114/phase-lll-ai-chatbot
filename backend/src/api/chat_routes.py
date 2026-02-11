@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session
 from ..database.database import engine
-from ..schemas.chat_schemas import ChatRequest, ChatResponse, ToolCallInfo
+from ..schemas.chat_schemas import ChatRequest, ChatResponse, ToolCallInfo, ChatHistoryResponse, MessageInfo
 from ..services.conversation_service import ConversationService
 from ..services.message_service import MessageService
 from ..agent.runner import run as run_agent
@@ -92,6 +92,49 @@ async def chat(
         raise
     except Exception as e:
         log_error(f"Chat error: {str(e)}", extra={"user_id": user_id})
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="I'm having trouble right now. Please try again.",
+        )
+
+
+@router.get("/{user_id}/chat/history", response_model=ChatHistoryResponse)
+async def chat_history(
+    user_id: str,
+    session: Session = Depends(get_session),
+    current_user: str = Depends(get_current_user),
+):
+    if user_id != current_user:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden",
+        )
+
+    try:
+        conversation = ConversationService.get_by_user_id(session, user_id)
+        if not conversation:
+            return ChatHistoryResponse(conversation_id=None, messages=[])
+
+        db_messages = MessageService.list_by_conversation(session, conversation.id)
+        messages = [
+            MessageInfo(
+                id=msg.id,
+                role=msg.role,
+                content=msg.content,
+                created_at=msg.created_at,
+            )
+            for msg in db_messages
+        ]
+
+        return ChatHistoryResponse(
+            conversation_id=conversation.id,
+            messages=messages,
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        log_error(f"Chat history error: {str(e)}", extra={"user_id": user_id})
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal server error",

@@ -19,6 +19,11 @@ class ConversationService:
         return conversation
 
     @staticmethod
+    def get_by_user_id(session: Session, user_id: str) -> Optional[Conversation]:
+        statement = select(Conversation).where(Conversation.user_id == user_id)
+        return session.exec(statement).first()
+
+    @staticmethod
     def get_by_id(session: Session, conversation_id: str, user_id: str) -> Optional[Conversation]:
         statement = select(Conversation).where(
             Conversation.id == conversation_id,

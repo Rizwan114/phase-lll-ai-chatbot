@@ -1,26 +1,16 @@
 <!--
 Sync Impact Report:
-- Version change: 1.1.0 → 2.0.0
-- Modified principles:
-  - "Spec-First Development" → "Spec-First Discipline" (renamed, strengthened)
-  - "Correctness and Consistency" → "Stateless Architecture Invariants" (redefined)
-  - "Security-by-Design" → "Data Integrity and User Isolation" (narrowed scope)
-  - "Automation Over Manual Work" → "Agentic Workflow Enforcement" (expanded)
-  - "Tech Stack Compliance" → "Tech Stack Compliance" (updated stack)
-  - "Quality and Validation Standards" → "MCP Tool Contract Integrity" (new focus)
-- Added sections:
-  - Principle VII: AI Agent Behavior Constraints
-  - Principle VIII: Error and Recovery Policy
-  - Canonical Data Models section
-  - Chat API Contract section
-- Removed sections:
-  - Better Auth + JWT references (not in Phase III scope)
-  - Frontend-specific rules (Phase III is backend/AI-focused)
-  - REST CRUD endpoint references (replaced by MCP + chat API)
+- Version change: 2.0.0 → 2.0.1
+- Modified principles: None renamed or redefined
+- Clarifications applied:
+  - Chat API Contract: added explicit response format requirement
+  - Principle II: added explicit "no cached chat state" wording
+- Added sections: None
+- Removed sections: None
 - Templates requiring updates:
-  - ✅ updated: .specify/templates/plan-template.md
-  - ✅ updated: .specify/templates/spec-template.md
-  - ✅ updated: .specify/templates/tasks-template.md
+  - ✅ verified: .specify/templates/plan-template.md (aligned)
+  - ✅ verified: .specify/templates/spec-template.md (aligned)
+  - ✅ verified: .specify/templates/tasks-template.md (aligned)
 - Follow-up TODOs: None
 -->
 # Phase III: Todo AI Chatbot Constitution
@@ -52,6 +42,7 @@ These rules are non-negotiable and MUST NOT be violated:
   on every request.
 - The server MUST NOT retain memory between requests.
 - Conversation continuity MUST survive server restarts.
+- No in-memory or cached chat state is permitted.
 
 **Rationale**: Stateless design guarantees horizontal scalability,
 reproducible behavior, and eliminates hidden coupling between
@@ -170,6 +161,9 @@ Each request MUST:
 The server MUST NOT retain memory between requests.
 Conversation continuity MUST survive restarts.
 
+**Response**: The endpoint MUST return a structured JSON response
+containing the assistant's reply and any relevant metadata.
+
 ## Canonical Data Models
 
 The following models are authoritative and MUST NOT drift:
@@ -251,4 +245,4 @@ All implementations MUST comply with these principles.
 - Constitutional compliance checks are embedded in the
   plan and tasks templates.
 
-**Version**: 2.0.0 | **Ratified**: 2026-02-01 | **Last Amended**: 2026-02-08
+**Version**: 2.0.1 | **Ratified**: 2026-02-01 | **Last Amended**: 2026-02-11

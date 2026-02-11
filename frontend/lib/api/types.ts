@@ -36,3 +36,35 @@ export interface AuthSession {
   accessToken: string;
   expiresAt: number;
 }
+
+// Chat types
+
+export interface ToolCallInfo {
+  tool: string;
+  input: unknown;
+  output?: unknown;
+}
+
+export interface ChatMessage {
+  id: number;
+  role: "user" | "assistant";
+  content: string;
+  created_at: string;
+  tool_calls?: ToolCallInfo[];
+}
+
+export interface ChatSendRequest {
+  message: string;
+  conversation_id?: string;
+}
+
+export interface ChatResponse {
+  conversation_id: string;
+  response: string;
+  tool_calls?: ToolCallInfo[];
+}
+
+export interface ChatHistoryResponse {
+  conversation_id: string | null;
+  messages: ChatMessage[];
+}
